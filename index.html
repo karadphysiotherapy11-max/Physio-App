@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyom Physio - Patient Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="light-theme">
+    <nav class="sidebar">
+        <div class="logo-area">
+            <div class="logo-placeholder">VP</div>
+            <h2>Vyom Physio</h2>
+        </div>
+        <ul class="nav-links">
+            <li class="active" onclick="showPage('dashboard')">Dashboard</li>
+            <li onclick="showPage('patient-list')">Patients</li>
+            <li onclick="showPage('add-patient')">Add Patient</li>
+            <li onclick="showPage('settings')">Settings</li>
+        </ul>
+        <div class="nav-footer">
+            <button id="theme-toggle">Toggle Dark Mode</button>
+            <select id="lang-toggle">
+                <option value="en">English</option>
+                <option value="gu">ગુજરાતી</option>
+            </select>
+        </div>
+    </nav>
+
+    <main class="content">
+        <section id="dashboard" class="page active">
+            <h1 data-en="Clinical Overview" data-gu="ક્લિનિકલ વિહંગાવલોકન">Clinical Overview</h1>
+            <div class="stats-grid">
+                <div class="stat-card"><h3>Total Patients</h3><p id="total-patients">0</p></div>
+                <div class="stat-card"><h3>Today's Sessions</h3><p>4</p></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="recoveryChart"></canvas>
+            </div>
+        </section>
+
+        <section id="patient-list" class="page">
+            <div class="header-actions">
+                <h1>Patient Directory</h1>
+                <input type="text" id="patientSearch" placeholder="Search by name or ID...">
+            </div>
+            <table id="patientTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Diagnosis</th>
+                        <th>Last Visit</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="patientTableBody"></tbody>
+            </table>
+        </section>
+
+        <section id="add-patient" class="page">
+            <h1>New Patient Registration</h1>
+            <form id="patientForm" class="grid-form">
+                <input type="text" id="pName" placeholder="Full Name" required>
+                <input type="number" id="pAge" placeholder="Age" required>
+                <select id="pGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="text" id="pContact" placeholder="Contact Number">
+                <textarea id="pDiagnosis" placeholder="Diagnosis / Chief Complaint" class="full-width"></textarea>
+                <button type="submit" class="btn-primary">Save Patient</button>
+            </form>
+        </section>
+
+        <section id="settings" class="page">
+            <h1>System Settings</h1>
+            <div class="settings-group">
+                <h3>Data Management</h3>
+                <button class="btn-secondary" onclick="exportData()">Export Backup (JSON)</button>
+                <input type="file" id="importFile" hidden onchange="importData(event)">
+                <button class="btn-secondary" onclick="document.getElementById('importFile').click()">Import Backup</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
